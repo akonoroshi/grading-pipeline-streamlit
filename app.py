@@ -1,7 +1,6 @@
 import tempfile
 import os
 import streamlit as st
-from streamlit_float import *
 from docx import Document
 from speech_input import get_speech_input
 from utils import get_grades
@@ -93,15 +92,9 @@ def write_results(results):
                         if 'suggestion' in error:
                             st.write(f"  Suggestion: {error['suggestion']}")
 
-def chat_content():
-    st.session_state['messages'].append({"role": "user", "content": st.session_state.content})
-    response = response_generator()
-    # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response})
-
 def chatbox():
     """
-    
+    User interface for the chat feature.
     """
     # Initialize chat history
     if "messages" not in st.session_state:

@@ -1,8 +1,6 @@
 from typing import Dict, List
 import os
 import re
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from pypdf import PdfReader
 from docx import Document
 
@@ -10,13 +8,6 @@ class DocumentProcessor:
     """
     Base class for processing documents.
     """
-
-    def __init__(self, chunk_size: int = 1000, chunk_overlap: int = 200):
-        # Initialize text splitter for breaking documents into manageable chunks
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size,  # Size of each text chunk
-            chunk_overlap=chunk_overlap  # Overlap between chunks to maintain context
-        )
 
     def extract_text_from_pdf(self, file_path: str) -> str:
         """
@@ -28,7 +19,6 @@ class DocumentProcessor:
         """
         text = ""
         pdf_reader = PdfReader(file_path)
-        #pdf_reader = PyPDF2.PdfReader(file_path)
         for page in pdf_reader.pages:
             text += page.extract_text() + "\n"
         return text
@@ -66,22 +56,11 @@ class AssignmentProcessor(DocumentProcessor):
     Handles the processing of different document types (PDF and DOCX)
     and text extraction from these documents.
     """
-    def __init__(self):
-        super().__init__(1000, 200)
-        # Initialize the embedding model for text similarity
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-mpnet-base-v2",
-            model_kwargs={'device': 'cpu'}
-        )
 
 class RubricProcessor(DocumentProcessor):
     """
     Handles the processing and extraction of grading criteria from rubric files.
     """
-
-    
-    def __init__(self):
-        super().__init__(500, 100)
 
     def _extract_points(self, section: str):
         """

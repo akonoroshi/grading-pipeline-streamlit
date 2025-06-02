@@ -1,5 +1,4 @@
 import random
-import time
 
 def response_generator():
     """

@@ -1,11 +1,12 @@
 langchain
 langchain-community
 langchain-core
-faiss-cpu
+langchain-openai
+langchain-deepseek
+langchain-huggingface
 transformers
 sentence-transformers
 python-docx
-PyPDF2
 pandas
 numpy
 streamlit
@@ -16,7 +17,6 @@ textblob
 spacy
 SpeechRecognition
 pyaudio
-wave
 pyttsx3
 sounddevice 
 pypdf

@@ -10,7 +10,6 @@ dependencies:
   - transformers
   - sentence-transformers
   - python-docx
-  - PyPDF2
   - pandas
   - numpy
   - streamlit
@@ -25,3 +24,6 @@ dependencies:
     - pyaudio
     - pyttsx3
     - sounddevice
+    - langchain-openai
+    - langchain-deepseek
+    - langchain-huggingface
