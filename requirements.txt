@@ -4,6 +4,7 @@ langchain-core
 langchain-openai
 langchain-deepseek
 langchain-huggingface
+langchain-ollama
 transformers
 sentence-transformers
 python-docx

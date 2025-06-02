@@ -103,7 +103,7 @@ def chatbox():
     # Create a container for the chatbox
     height = 500
     with st.container(height=height):
-        c = st.container(height=height-90)
+        c = st.container(height=height-90, border=False)
         # Display chat messages from history on app rerun
         for message in st.session_state.messages:
             c.chat_message(message["role"]).markdown(message["content"])
@@ -180,7 +180,7 @@ def main():
 
     method = st.selectbox(
         "Select Grading Method",
-        ("test-chat", "similarity", "deepseek-chat", "gpt-4.1-nano", "o4-mini"))
+        ("test-chat", "similarity", "deepseek-chat", "deepseek-r1", "gpt-4.1-nano", "o4-mini"))
     
     # Grade for the first time or re-grade
     if 'results' not in st.session_state:

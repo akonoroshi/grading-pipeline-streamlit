@@ -2,6 +2,7 @@ from typing import Dict
 import re
 from langchain_deepseek import ChatDeepSeek
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from grading_pipeline import GradingSystem
 
@@ -22,9 +23,16 @@ class GradingSystemLLM(GradingSystem):
         temperature = 0
         max_tokens = 1024
         max_retries = 3
-        if "deepseek" in model_name:
+        if model_name == "deepseek-chat":
             llm = ChatDeepSeek(
                 model_name=model_name,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                max_retries=max_retries,
+            )
+        elif model_name == "deepseek-r1":
+            llm = ChatOllama(
+                model=model_name,
                 temperature=temperature,
                 max_tokens=max_tokens,
                 max_retries=max_retries,

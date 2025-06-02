@@ -27,3 +27,4 @@ dependencies:
     - langchain-openai
     - langchain-deepseek
     - langchain-huggingface
+    - langchain-ollama
