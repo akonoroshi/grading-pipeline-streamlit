@@ -252,7 +252,8 @@ class GradingSystem:
                 'criteria_scores': scores,
                 'final_grade': final_grade,
                 'total_points_possible': total_points_possible,
-                'total_points_earned': earned_points
+                'total_points_earned': earned_points,
+                'assignment_text': assignment_text,
             }
             
         except Exception as e:

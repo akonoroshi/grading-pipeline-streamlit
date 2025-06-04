@@ -3,10 +3,9 @@ import os
 import streamlit as st
 from docx import Document
 from speech_input import get_speech_input
-from utils import get_grades
-from chatbot import response_generator
-
-#float_init(theme=True, include_unstable_primary=False)
+from grading_utils import get_grading_system
+from llm_utils import get_model
+from chatbot import response_generator, get_submission_prompt, get_system_prompt
 
 def save_uploaded_file(uploaded_file):
     """
@@ -92,32 +91,45 @@ def write_results(results):
                         if 'suggestion' in error:
                             st.write(f"  Suggestion: {error['suggestion']}")
 
-def chatbox():
+def _add_messages(c, user_prompt: dict):
+    st.session_state.messages.append(user_prompt)
+    with c:
+        with st.spinner("Your AI tutor is typing..."):
+            response = response_generator(st.session_state.model, st.session_state.messages)
+    st.session_state.messages.append({"role": "assistant", "content": response})
+
+def chatbox(method: str, submitted: bool):
     """
     User interface for the chat feature.
     """
     # Initialize chat history
     if "messages" not in st.session_state:
-        st.session_state.messages = []
+        st.session_state.messages = [get_system_prompt()]
+    # Initialize the model for the chat
+    if "model" not in st.session_state:
+        if "test-chat" in method or method == "similarity":
+            method = "deepseek-r1"  # Use a default model for these methods
+        st.session_state.model = get_model(method)
     
     # Create a container for the chatbox
     height = 500
     with st.container(height=height):
         c = st.container(height=height-90, border=False)
+        if submitted:
+            # Add the submission prompt to the chat history
+            _add_messages(c, get_submission_prompt(st.session_state.results[-1]))
+
         # Display chat messages from history on app rerun
         for message in st.session_state.messages:
-            c.chat_message(message["role"]).markdown(message["content"])
+            if message["role"] != "system" and not (message["role"] == "user" and message["content"].startswith("Plan:")):
+                c.chat_message(message["role"]).markdown(message["content"])
         
         # Accept user input
         #messages = st.container(height=100)
         if prompt := st.chat_input("Say something"):
             c.chat_message("user").markdown(prompt)
-            st.session_state['messages'].append({"role": "user", "content": prompt})
-            response = response_generator()
-            # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": response})
-            c.chat_message("assistant").markdown(response)
-
+            _add_messages(c, {"role": "user", "content": prompt})
+            c.chat_message("assistant").markdown(st.session_state.messages[-1]["content"])
         
 def main():
     """
@@ -180,9 +192,10 @@ def main():
 
     method = st.selectbox(
         "Select Grading Method",
-        ("test-chat", "similarity", "deepseek-chat", "deepseek-r1", "gpt-4.1-nano", "o4-mini"))
+        ("test-chat-low", "test-chat-mid", "test-chat-high", "similarity", "deepseek-chat", "deepseek-r1", "gpt-4.1-nano", "o4-mini"))
     
     # Grade for the first time or re-grade
+    submitted = False
     if 'results' not in st.session_state:
         st.session_state.results = []
         st.session_state.graded = False
@@ -210,7 +223,16 @@ def main():
                     else st.session_state.speech_file_path
                 
                 # Initialize grading system and grade assignment
-                results = get_grades(method, final_assignment_path, rubric_path)
+                if 'grading_system' not in st.session_state:
+                    st.session_state.grading_system = get_grading_system(method)
+                if "test-chat" in method:
+                    if "low" in method:
+                        st.session_state.grading_system.coefficient = 0.4
+                    elif "mid" in method:
+                        st.session_state.grading_system.coefficient = 0.7
+                    elif "high" in method:
+                        st.session_state.grading_system.coefficient = 0.95
+                results = st.session_state.grading_system.grade_assignment(final_assignment_path, rubric_path)
                 
                 # Cleanup temporary files
                 if final_assignment_path:
@@ -223,6 +245,7 @@ def main():
                 st.session_state.speech_file_path = None
                 st.session_state.results.append(results)
                 st.session_state.graded = True
+                submitted = True
                 
         except Exception as e:
             st.error(f"Error processing files: {e}")
@@ -231,7 +254,7 @@ def main():
     if st.session_state.graded:
         # Display results and chatbox
         write_results(st.session_state.results[-1])
-        chatbox()
+        chatbox(method, submitted)
 
 if __name__ == "__main__":
     main() 

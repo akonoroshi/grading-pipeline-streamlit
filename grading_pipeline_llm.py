@@ -1,10 +1,7 @@
 from typing import Dict
-import re
-from langchain_deepseek import ChatDeepSeek
-from langchain_openai import ChatOpenAI
-from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from grading_pipeline import GradingSystem
+from llm_utils import get_model
 
 class Grade(BaseModel):
     """
@@ -18,36 +15,9 @@ class GradingSystemLLM(GradingSystem):
     Main grading system that handles the grading process using semantic similarity
     and grammar checking.
     """
-    def __init__(self, model_name: str = "deepseek-chat"):
+    def __init__(self, model_name: str):
         super().__init__()
-        temperature = 0
-        max_tokens = 1024
-        max_retries = 3
-        if model_name == "deepseek-chat":
-            llm = ChatDeepSeek(
-                model_name=model_name,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                max_retries=max_retries,
-            )
-        elif model_name == "deepseek-r1":
-            llm = ChatOllama(
-                model=model_name,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                max_retries=max_retries,
-            )
-        elif "gpt" in model_name or re.search(r"o\d", model_name):
-            if re.search(r"o\d", model_name):
-                temperature = 1
-            llm = ChatOpenAI(
-                model_name=model_name,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                max_retries=max_retries,
-            )
-        else:
-            raise NotImplementedError(f"Model {model_name} is not supported.")
+        llm = get_model(model_name)
         self.llm = llm.with_structured_output(Grade)
     
     def _get_score(self, item: Dict, assignment_text: str):

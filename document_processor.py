@@ -134,8 +134,6 @@ class RubricProcessor(DocumentProcessor):
         try:
             # Extract text
             text = self.process_document(file_path)
-            
-            print(text)
             if not text.strip():
                 raise ValueError("No text could be extracted from the rubric PDF")
             
@@ -219,8 +217,6 @@ class RubricProcessor(DocumentProcessor):
             
             if not rubric_items:
                 raise ValueError("No valid criteria found in rubric")
-            
-            print("Extracted Rubric Items:", rubric_items)
             return rubric_items
             
         except Exception as e:
