@@ -5,7 +5,7 @@ from langchain_ollama import ChatOllama
 
 def get_model(model_name: str):
     temperature = 0
-    max_tokens = 1024
+    max_tokens = 2048
     max_retries = 3
     if model_name == "deepseek-chat":
         llm = ChatDeepSeek(

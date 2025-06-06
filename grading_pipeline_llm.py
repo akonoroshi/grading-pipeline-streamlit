@@ -1,5 +1,7 @@
 from typing import Dict
 from pydantic import BaseModel, Field
+from langchain_openai.chat_models.base import OpenAIRefusalError
+from openai import LengthFinishReasonError
 from grading_pipeline import GradingSystem
 from llm_utils import get_model
 
@@ -30,7 +32,10 @@ class GradingSystemLLM(GradingSystem):
             ("system", f"You are a grading assistant. Your task is to evaluate the student's assignment based on the following criteria on a scale of 0-{item['points']}:\n{critetia_text}"),
             ("human", assignment_text)
         ]
-        output = self.llm.invoke(messages)
+        try:
+            output = self.llm.invoke(messages)
+        except (OpenAIRefusalError, LengthFinishReasonError) as e:
+            output = Grade(justification=str(e), score=0.0)
 
         results = {
             'description': item['description'],
