@@ -20,6 +20,8 @@ dependencies:
   - spacy
   - SpeechRecognition
   - pypdf
+  - pdf2image
+  - torchvision
   - pip:
     - pyaudio
     - pyttsx3
@@ -28,3 +30,4 @@ dependencies:
     - langchain-deepseek
     - langchain-huggingface
     - langchain-ollama
+    - qwen-vl-utils

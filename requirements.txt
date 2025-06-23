@@ -21,3 +21,6 @@ pyaudio
 pyttsx3
 sounddevice 
 pypdf
+pdf2image
+qwen-vl-utils
+torchvision
