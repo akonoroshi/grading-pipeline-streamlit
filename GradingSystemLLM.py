@@ -2,7 +2,7 @@ from typing import Dict
 from pydantic import BaseModel, Field
 from langchain_openai.chat_models.base import OpenAIRefusalError
 from openai import LengthFinishReasonError
-from grading_pipeline import GradingSystem
+from GradingSystem import GradingSystem
 from llm_utils import get_model
 
 class Grade(BaseModel):

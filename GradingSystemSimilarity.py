@@ -2,7 +2,7 @@ from typing import Dict
 from functools import lru_cache
 from langchain_huggingface import HuggingFaceEmbeddings
 import numpy as np
-from grading_pipeline import GradingSystem
+from GradingSystem import GradingSystem
 
 class GradingSystemSimilarity(GradingSystem):
     """

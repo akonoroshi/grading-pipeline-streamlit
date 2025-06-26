@@ -1,5 +1,5 @@
 from typing import Dict
-from grading_pipeline import GradingSystem
+from GradingSystem import GradingSystem
 
 class GradingSystemDummy(GradingSystem):
     """

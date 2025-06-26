@@ -1,7 +1,7 @@
 import torch
-from grading_pipeline_similarity import GradingSystemSimilarity
-from grading_pipeline_llm import GradingSystemLLM
-from grading_pipeline_dummy import GradingSystemDummy
+from GradingSystemSimilarity import GradingSystemSimilarity
+from GradingSystemLLM import GradingSystemLLM
+from GradingSystemDummy import GradingSystemDummy
 
 PROBLEMS = [
     {
