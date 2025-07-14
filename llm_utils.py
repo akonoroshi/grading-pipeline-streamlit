@@ -1,5 +1,6 @@
 import re
-from typing import Optional
+import base64
+from typing import Optional, List
 from dotenv import load_dotenv
 from langchain_deepseek import ChatDeepSeek
 from langchain_openai import ChatOpenAI
@@ -24,7 +25,6 @@ def get_model(
             max_retries=max_retries,
         )
     elif model_name == "deepseek-r1" or model_name == "qwen2.5vl":
-        model_name = model_name.replace("-Ollama", "")
         llm = ChatOllama(
             model=model_name,
             temperature=temperature,
@@ -48,6 +48,11 @@ def get_model(
     else:
         raise NotImplementedError(f"Model {model_name} is not supported.")
     return llm
+
+def image_content(image_path: str) -> List[dict]:
+    with open(image_path, "rb") as f:
+        img_b64 = base64.b64encode(f.read()).decode("utf-8")
+    return {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img_b64}"}}
 
 if __name__ == "__main__":
     llm = get_model("qwen2.5-vl").bind(logprobs=True, top_logprobs=15)

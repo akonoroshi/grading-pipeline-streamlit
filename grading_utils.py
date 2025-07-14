@@ -1,28 +1,7 @@
-import torch
 from GradingSystemSimilarity import GradingSystemSimilarity
 from GradingSystemLLM import GradingSystemLLM
 from GradingSystemDummy import GradingSystemDummy
-
-PROBLEMS = [
-    {
-        "problem": "For a truss or a frame, each connection to the ground provides up to two force components and one moment depending on the type of support used. For the given structure, what are the correct reaction forces at the support A and D? A is a hinge support, and D is a roller support.",
-        "images": [
-            "../Updated Report and Collected Dataset_SBU/Assigned Questions and Collected Response/Cycle 1/Practice1 Problem.jpg",
-            "../Updated Report and Collected Dataset_SBU/Assigned Questions and Collected Response/Cycle 1/Practice1 Choices.jpg"
-            ]
-        ,
-        "choices": ["a", "b", "c", "d", "e"],
-        "answer": "e"
-    }
-]
-TEXT_PATH = "../samples/StaticsEngineeringMechanicsRCHibbelerbook12th.pdf"
-
-def get_device():
-    if torch.cuda.is_available():
-        return "cuda"
-    if torch.backends.mps.is_available():
-        return "mps"
-    return "cpu"
+from utils import get_device
 
 def get_grading_system(method: str):
     """

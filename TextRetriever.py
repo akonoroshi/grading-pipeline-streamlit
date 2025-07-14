@@ -1,8 +1,7 @@
 from typing import List, Iterable
-import base64
 from numpy import argsort
 from scipy.special import softmax
-from llm_utils import get_model
+from llm_utils import get_model, image_content
 
 SERVER_URL  = "http://127.0.0.1:8080/v1/chat/completions"
 
@@ -26,9 +25,7 @@ class TextRetriever:
             self.base_messages = base_messages
 
     def image_content(self, image_path: str) -> List[dict]:
-        with open(image_path, "rb") as f:
-            img_b64 = base64.b64encode(f.read()).decode("utf-8")
-        return {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img_b64}"}}
+        return image_content(image_path)
 
     def get_user_content(self, problem: dict, document) -> List[dict]:
         raise NotImplementedError("This method should be implemented in subclasses.")

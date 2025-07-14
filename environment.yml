@@ -23,6 +23,7 @@ dependencies:
   - pdf2image
   - torchvision
   - inflect
+  - jsonlines
   - pip:
     - pyaudio
     - pyttsx3

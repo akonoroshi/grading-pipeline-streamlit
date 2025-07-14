@@ -1,2 +1,8 @@
 .env
 *.pyc
+rubrics/
+.DS_Store
+problems/
+textbooks/
+index/
+settings.json

@@ -2,7 +2,7 @@ import tempfile
 import os
 from typing import List
 from pdf2image import convert_from_path
-from grading_utils import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH
 from TextRetriever import TextRetriever
 
 # prepare messages: one system message + one image message per file + the text prompt

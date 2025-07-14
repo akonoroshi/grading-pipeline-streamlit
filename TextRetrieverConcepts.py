@@ -6,7 +6,8 @@ from pydantic import BaseModel, Field
 import inflect
 from pdf2image import convert_from_path
 import torch
-from grading_utils import get_device, PROBLEMS, TEXT_PATH
+from utils import get_device
+from domain_information import PROBLEMS, TEXT_PATH
 from TextRetriever import TextRetriever
 
 class Concepts(BaseModel):
@@ -32,7 +33,7 @@ class TextRetrieverConcepts(TextRetriever):
             )
 
             self.rag.index(
-                input_path=TEXT_PATH,
+                input_path=text_path,
                 index_name=index_name,
                 overwrite=False
                 )
@@ -44,14 +45,14 @@ class TextRetrieverConcepts(TextRetriever):
             )
         self.p = inflect.engine()
 
-    def get_user_content(self, problem, document):
+    def get_user_content(self, problem: dict, document):
         user_content = [{
             "type": "text",
             "text": f"List the mechanics concepts that are required to solve the following problem.\nProblem: {problem["problem"]}"}]
         user_content.append(self.image_content(problem["images"][0]))
         return user_content
     
-    def retrieve(self, problem, k=5) -> List[int]:
+    def retrieve(self, problem: dict, k=5) -> List[int]:
         user_content = self.get_user_content(problem, None)
         msgs = self.base_messages + [{
             "role": "user",
@@ -86,14 +87,14 @@ class TextRetrieverConcepts(TextRetriever):
                 batch_query = self.rag.model.processor.process_images(text_images)
                 batch_query = {k: v.to(self.rag.model.device).to(self.rag.model.model.dtype if v.dtype in [torch.float16, torch.bfloat16, torch.float32] else v.dtype) for k, v in batch_query.items()}
                 embeddings_query = self.rag.model.model(**batch_query)
-            req_embeddings.append(torch.unbind(embeddings_query.to("cpu"))[0])
+                req_embeddings.append(torch.unbind(embeddings_query.to("cpu"))[0])
         
         with torch.inference_mode():
             batch_query = self.rag.model.processor.process_queries([problem["problem"]])
             batch_query = {k: v.to(self.rag.model.device).to(self.rag.model.model.dtype if v.dtype in [torch.float16, torch.bfloat16, torch.float32] else v.dtype) for k, v in batch_query.items()}
             embeddings_query = self.rag.model.model(**batch_query)
-        qs = list(torch.unbind(embeddings_query.to("cpu")))
-        scores = self.rag.model.processor.score(qs,req_embeddings).cpu().numpy()
+            qs = list(torch.unbind(embeddings_query.to("cpu")))
+            scores = self.rag.model.processor.score(qs,req_embeddings).cpu().numpy()
         top_pages = scores.argsort(axis=1)[0][-k:][::-1].tolist()
 
         return [pages[i] for i in top_pages]
@@ -102,7 +103,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 if __name__ == "__main__":
     model_name = "qwen2.5vl"
-    index_root = "../samples/index"
+    index_root = "./index"
     index_name = "Engineering Mechanics"
 
     rag = TextRetrieverConcepts(

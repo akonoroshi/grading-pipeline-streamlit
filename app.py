@@ -185,10 +185,25 @@ def main():
             assignment_path = st.session_state.speech_file_path
     
     # Rubric upload (always file upload)
-    rubric_file = st.file_uploader(
-        "Upload Rubric (DOCX only)", 
-        type=['docx']
-    )
+    # rubric_file = st.file_uploader(
+    #     "Upload Rubric (DOCX only)", 
+    #     type=['docx']
+    # )
+    rubric_file = st.selectbox(
+        "Select the type of question",
+        ("domain-specific", "learning evaluation", "learning plan", "learning reflection"))
+    if rubric_file == "domain-specific":
+        problem_name = st.selectbox(
+            "Select the problem",
+            ("SBU MEC 260/Problem 1", "SBU MEC 260/Problem 2", "SBU MEC 260/Problem 3", 
+             "SBU MEC 260/Problem 4", "SBU MEC 260/Problem 5", "SBU MEC 260/Problem 6",
+             "SBU MEC 260/Problem 7", "SBU MEC 260/Problem 8", "SBU MEC 260/Problem 9",
+             "SBU MEC 260/Problem 10", "SBU MEC 260/Problem 11", "SBU MEC 260/Problem 12"),
+             index=None,
+             placeholder="Select a problem"
+        )
+    else:
+        problem_name = None
 
     method = st.selectbox(
         "Select Grading Method",
@@ -212,7 +227,8 @@ def main():
         try:
             with st.spinner("Processing..."):
                 # Save rubric file
-                rubric_path = save_uploaded_file(rubric_file)
+                #rubric_path = save_uploaded_file(rubric_file)
+                rubric_path = os.path.abspath(f"./rubrics/{rubric_file} rubrics.docx")
                 
                 if not rubric_path:
                     st.error("Error saving rubric file")
@@ -232,13 +248,13 @@ def main():
                         st.session_state.grading_system.coefficient = 0.7
                     elif "high" in method:
                         st.session_state.grading_system.coefficient = 0.95
-                results = st.session_state.grading_system.grade_assignment(final_assignment_path, rubric_path)
+                results = st.session_state.grading_system.grade_assignment(final_assignment_path, rubric_path, problem_name)
                 
                 # Cleanup temporary files
                 if final_assignment_path:
                     os.unlink(final_assignment_path)
-                if rubric_path:
-                    os.unlink(rubric_path)
+                # if rubric_path:
+                #     os.unlink(rubric_path)
                 
                 # Clear session state after successful grading
                 st.session_state.speech_text = None
@@ -247,7 +263,7 @@ def main():
                 st.session_state.graded = True
                 submitted = True
                 
-        except Exception as e:
+        except FileNotFoundError as e:
             st.error(f"Error processing files: {e}")
 
     # Display grades and chatbox if grading has been done

@@ -25,3 +25,4 @@ pdf2image
 qwen-vl-utils
 torchvision
 inflect
+jsonlines

@@ -183,7 +183,7 @@ class GradingSystem:
         """
         raise NotImplementedError("This method should be implemented by subclasses")
     
-    def grade_assignment(self, assignment_path: str, rubric_path: str) -> Dict:
+    def grade_assignment(self, assignment_path: str, rubric_path: str, problem_name: str = None) -> Dict:
         """
         Grades an assignment based on the provided rubric.
         Args:
@@ -199,7 +199,11 @@ class GradingSystem:
                 raise ValueError("No text extracted from assignment")
             
             # Process rubric
-            rubric_items = self.rubric_processor.extract_rubric(rubric_path)
+            if problem_name:
+                modify_rubric = True
+            else:
+                modify_rubric = False
+            rubric_items = self.rubric_processor.extract_rubric(rubric_path, problem_name, modify_rubric)
             if not rubric_items:
                 raise ValueError("No criteria extracted from rubric")
             
@@ -256,5 +260,5 @@ class GradingSystem:
                 'assignment_text': assignment_text,
             }
             
-        except Exception as e:
-            raise Exception(f"Error grading assignment: {str(e)}")
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Error grading assignment: {str(e)}")
