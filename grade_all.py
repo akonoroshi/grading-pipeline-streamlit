@@ -2,7 +2,7 @@ import os
 import glob
 import random
 import pandas as pd
-from grading_utils import get_grading_system
+from grading_system.grading_utils import get_grading_system
 
 def list_files_with_pattern(directory, pattern):
     """Lists files in a directory matching a given pattern.

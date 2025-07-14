@@ -1,7 +1,7 @@
 import pickle
 import os
 from domain_information import PROBLEMS, TEXT_PATH
-from TextRetrieverConcepts import TextRetrieverConcepts
+from retriever.TextRetrieverConcepts import TextRetrieverConcepts
 
 model_name = "qwen2.5vl"
 index_root = "./index"

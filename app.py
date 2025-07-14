@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from docx import Document
 from speech_input import get_speech_input
-from grading_utils import get_grading_system
+from grading_system.grading_utils import get_grading_system
 from llm_utils import get_model
 from chatbot import response_generator, get_submission_prompt, get_system_prompt
 

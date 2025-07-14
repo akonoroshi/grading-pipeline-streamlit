@@ -9,7 +9,7 @@ from pdf2image import convert_from_path
 from pydantic import BaseModel, Field
 from llm_utils import get_model, image_content
 from domain_information import PROBLEMS, TEXT_PATH
-from TextRetrieverConcepts import TextRetrieverConcepts
+from retriever.TextRetrieverConcepts import TextRetrieverConcepts
 
 class Label(BaseModel):
     desctiption: str = Field(description="The characterisics of student rationales that are considered as this label (high, medium, low, or very low). This new description must contain domain knowledge identifed in previous steps.")
