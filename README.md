@@ -30,7 +30,13 @@ sudo apt-get install -y poppler-utils
 
 ## Enabling LLMs
 
-You can use your local LLMs or external APIs. We currently support OpenAI APIs, DeepSeek APIs (chat only), DeepSeek r1 through Ollama, and qwen2.5vl though Ollama. You can add more LLMs by updating `get_model` in `llm_utils.py`.
+You can use your local LLMs or external APIs. We currently support OpenAI APIs, DeepSeek APIs (chat only), DeepSeek r1 through Ollama, and qwen2.5vl though Ollama. You can add more LLMs by updating `get_model` in `llm_utils.py` and the following lines in `app.py`:
+
+```python
+method = st.selectbox(
+        "Select Grading Method",
+        ("test-chat-low", "test-chat-mid", "test-chat-high", "similarity", "deepseek-chat", "deepseek-r1", "gpt-4.1-nano", "o4-mini"))
+```
 
 ### Use local LLMs
 
