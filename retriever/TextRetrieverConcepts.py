@@ -7,7 +7,7 @@ import inflect
 from pdf2image import convert_from_path
 import torch
 from utils import get_device
-from domain_information import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH, DOMAIN, INDEX_NAME
 from TextRetriever import TextRetriever
 
 class Concepts(BaseModel):
@@ -48,7 +48,7 @@ class TextRetrieverConcepts(TextRetriever):
     def get_user_content(self, problem: dict, document):
         user_content = [{
             "type": "text",
-            "text": f"List the mechanics concepts that are required to solve the following problem.\nProblem: {problem["problem"]}"}]
+            "text": f"List the {DOMAIN} concepts that are required to solve the following problem.\nProblem: {problem["problem"]}"}]
         user_content.append(self.image_content(problem["images"][0]))
         return user_content
     
@@ -104,13 +104,12 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 if __name__ == "__main__":
     model_name = "qwen2.5vl"
     index_root = "./index"
-    index_name = "Engineering Mechanics"
 
     rag = TextRetrieverConcepts(
         model_name,
         TEXT_PATH,
         index_root,
-        index_name
+        INDEX_NAME
     )
 
     print(rag.retrieve(PROBLEMS[0], 5))

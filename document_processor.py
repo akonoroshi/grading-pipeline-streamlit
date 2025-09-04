@@ -8,7 +8,7 @@ from docx import Document
 from pdf2image import convert_from_path
 from pydantic import BaseModel, Field
 from llm_utils import get_model, image_content
-from domain_information import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH, INDEX_NAME
 from retriever.TextRetrieverConcepts import TextRetrieverConcepts
 
 class Label(BaseModel):
@@ -256,7 +256,7 @@ Problem: {problem["problem"]}"""}]
         problem = PROBLEMS[problem_name]
         model_name = "qwen2.5vl"
         index_root = "./index"
-        index_name = "Engineering Mechanics"
+        index_name = INDEX_NAME
         if self.retriever is None:
             self.set_retriever(model_name, TEXT_PATH, index_root, index_name)
         pages = self.retriever.retrieve(problem)

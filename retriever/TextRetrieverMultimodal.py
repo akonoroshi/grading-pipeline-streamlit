@@ -2,12 +2,12 @@ import tempfile
 import os
 from typing import List
 from pdf2image import convert_from_path
-from domain_information import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH, DOMAIN
 from TextRetriever import TextRetriever
 
 # prepare messages: one system message + one image message per file + the text prompt
 base_messages = [
-    {"role": "system", "content": "I will give you a multiple-choice physics problem. The first image is the system diagram of the problem, the second image contains the choices, and the third image is a page in a textbook that may help you answer. Output only the letter (a-e) of the correct answer without any justifications."},
+    {"role": "system", "content": f"I will give you a multiple-choice {DOMAIN} problem. The first image is the system diagram of the problem, the second image contains the choices, and the third image is a page in a textbook that may help you answer. Output only the letter (a-e) of the correct answer without any justifications."},
 ]
 
 class TextRetrieverMultimodal(TextRetriever):

@@ -1,12 +1,11 @@
 import pickle
 import os
-from domain_information import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH, INDEX_NAME
 from retriever.TextRetrieverConcepts import TextRetrieverConcepts
 
 model_name = "qwen2.5vl"
 index_root = "./index"
-index_name = "Engineering Mechanics"
-retriever = TextRetrieverConcepts(model_name, TEXT_PATH, index_root, index_name)
+retriever = TextRetrieverConcepts(model_name, TEXT_PATH, index_root, INDEX_NAME)
 
 for problem_name ,problem in PROBLEMS.items():
     pkl_path = os.path.join("problems", problem_name, "pages.pkl")

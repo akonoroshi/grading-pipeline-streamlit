@@ -109,3 +109,5 @@ PROBLEMS = {
     },
 }
 TEXT_PATH = "./textbooks/StaticsEngineeringMechanicsRCHibbelerbook12th.pdf"
+DOMAIN = "mechanics"
+INDEX_NAME = "Engineering Mechanics"

@@ -1,6 +1,6 @@
 .env
 *.pyc
-rubrics/
+*.docx
 .DS_Store
 problems/
 textbooks/

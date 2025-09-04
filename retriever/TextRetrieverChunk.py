@@ -7,7 +7,7 @@ from langchain_docling import DoclingLoader
 from docling.chunking import HybridChunker
 import pandas as pd
 
-from grading_utils import PROBLEMS, TEXT_PATH
+from domain_information import PROBLEMS, TEXT_PATH, DOMAIN
 from TextRetriever import TextRetriever
 
 class TextRetrieverChunk(TextRetriever):
@@ -65,7 +65,7 @@ class TextRetrieverChunk(TextRetriever):
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 base_messages = [
-    {"role": "system", "content": "I will give you a multiple-choice physics problem. The first image is the system diagram of the problem, and the second image contains the choices. I will also give some knowledge from a textbook that may help you answer. Output only the letter (a-e) of the correct answer without any justifications."},
+    {"role": "system", "content": f"I will give you a multiple-choice {DOMAIN} problem. The first image is the system diagram of the problem, and the second image contains the choices. I will also give some knowledge from a textbook that may help you answer. Output only the letter (a-e) of the correct answer without any justifications."},
 ]
 
 if __name__ == "__main__":

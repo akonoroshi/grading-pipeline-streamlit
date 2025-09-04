@@ -30,7 +30,7 @@ sudo apt-get install -y poppler-utils
 
 ## Enabling LLMs
 
-You can use your local LLMs or external APIs.
+You can use your local LLMs or external APIs. We currently support OpenAI APIs, DeepSeek APIs (chat only), DeepSeek r1 through Ollama, and qwen2.5vl though Ollama. You can add more LLMs by updating `get_model` in `llm_utils.py`.
 
 ### Use local LLMs
 
@@ -56,7 +56,7 @@ export OPENAI_API_KEY="your-api-key"
 
 ## Running the app
 
-You can simply run the streamlit app
+First, create a folder called "problems" at the same directory as README. Inside the "problems" folder, create a folfer for each problem (you may create more subdirectories if you want) and place the images (problem diagrams and choices) in the folder. Then, edit `domain_information.py` to update the details of the problems, the path to your textbook, your subject domain, and a preferred name of your course. The keys of the variable `PROBLEMS` must be the same as the name of the folder of each problem. Finally, you can simply run the streamlit app to test it out:
 
 ```bash
 streamlit run app.py

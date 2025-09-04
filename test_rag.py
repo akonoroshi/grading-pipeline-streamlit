@@ -3,12 +3,12 @@ import json
 import pickle
 from byaldi import RAGMultiModalModel
 from utils import get_device
-from domain_information import TEXT_PATH, PROBLEMS
+from domain_information import TEXT_PATH, PROBLEMS, INDEX_NAME
 
 if __name__ == "__main__":
     model_name = "qwen2.5vl"
     index_root = "./index"
-    index_name = "Engineering Mechanics"
+    index_name = INDEX_NAME
     text_path = TEXT_PATH
     index_model = "vidore/colqwen2.5-v0.2"
 

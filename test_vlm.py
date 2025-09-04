@@ -4,7 +4,7 @@ import json
 from typing import List
 from pydantic import BaseModel, Field
 from llm_utils import get_model
-from domain_information import PROBLEMS
+from domain_information import PROBLEMS, DOMAIN
 
 class Answer(BaseModel):
     description: str = Field(description="A description of the diagram of the problem.")
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         msgs = [
             {
                 "role": "system",
-                "content": "I will give you a multiple-choice physics problem with images and its answer. The first image is the system diagram of the problem, and the second image contains the choices. First, describe the diagram of the problem. Then, provide a rationale for the given correct answer."
+                "content": f"I will give you a multiple-choice {DOMAIN} problem with images and its answer. The first image is the system diagram of the problem, and the second image contains the choices. First, describe the diagram of the problem. Then, provide a rationale for the given correct answer."
             },
             {
                 "role": "user",
