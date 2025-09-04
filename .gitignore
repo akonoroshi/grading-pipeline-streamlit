@@ -1,6 +1,5 @@
 .env
 *.pyc
-*.docx
 .DS_Store
 problems/
 textbooks/
